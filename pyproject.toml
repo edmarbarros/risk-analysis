@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "risk-analysis-api"
+version = "0.1.0"
+description = "Origin Risk Analysis API"
+authors = ["Edmar Barros <edmarbarros@users.noreply.github.com>"]
+packages = [
+    { include = "risk_analysis_api", from = "src" },
+]
+
+
+[tool.poetry.scripts]
+start = "src.main:start"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.75.2"
+uvicorn = "^0.17.6"
+requests = "^2.27.1"
+pytest-cov = "^3.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
