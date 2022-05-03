@@ -15,13 +15,3 @@ router = APIRouter(
 async def run_risk_analysis(subject: PersonalInformationSchema):
     return RiskAnalysisService().run_risk_analysis(subject)
 
-#
-# @router.get("/{analysis_id}", response_model=PersonalInformationSchema)
-# async def get_item(analysis_id: int): # , db: get_db = Depends()):
-#     return {"item_id": analysis_id}
-#
-#
-# @router.get("/")
-# async def get_all():
-#     print('test')
-#     return {"message": "Hello World"}
