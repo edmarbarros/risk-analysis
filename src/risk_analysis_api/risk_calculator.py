@@ -5,12 +5,7 @@ from src.risk_analysis_api.schemas.personal_information_schema import PersonalIn
     MaritalStatusEnum, VehicleSchema, HouseSchema
 
 from .schemas.risk_score import RiskProfile, RiskScoreEnum
-
-# Load from DB
-# Create a config endpoint to update it and reload
-MIN_INCOME = 0
-MIN_AGE_LIMIT = 30
-MAX_AGE_LIMIT = 60
+from .risk_analysis_constants import MAX_AGE_LIMIT, MIN_AGE_LIMIT, MIN_INCOME, MIN_INCOME_THRESHOLD
 
 
 class RiskCalculator:
