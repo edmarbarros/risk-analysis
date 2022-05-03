@@ -70,8 +70,7 @@ class RiskCalculator:
 
     def calculate_subject_score(self, subject: PersonalInformationSchema) -> RiskProfile:
 
-        # print("Risk Questions: ", self.subject_risk_answers(subject.risk_questions))
-        initial_risk_value = self.subject_risk_answers(subject.risk_questions)
+        initial_risk_value = self.subject_risk_answers()
         risk_profile = {
             "auto": initial_risk_value,
             "home": initial_risk_value,
@@ -79,58 +78,49 @@ class RiskCalculator:
             "disability": initial_risk_value,
         }
 
-        # print("Income: ", self.subject_check_income(subject.income, MIN_INCOME))
-        if self.subject_check_income(subject.income, MIN_INCOME) is not True:
+        if self.subject_check_income_min(MIN_INCOME) is not True:
             risk_profile["auto"] = RiskScoreEnum.ineligible
             risk_profile["home"] = RiskScoreEnum.ineligible
             risk_profile["life"] = RiskScoreEnum.ineligible
             risk_profile["disability"] = RiskScoreEnum.ineligible
             return risk_profile
 
-        # print("Income: ", self.subject_check_income(subject.income, 200000))
-        if self.subject_check_income(subject.income, 200000) is not True:
+        if self.subject_check_income_min(MIN_INCOME_THRESHOLD) is not True:
             risk_profile["auto"] -= 1
             risk_profile["home"] -= 1
             risk_profile["life"] -= 1
             risk_profile["disability"] -= 1
 
-        # print("Owned House: ", self.subject_has_mortgaged_house(subject.house))
-        if self.subject_has_mortgaged_house(subject.house):
+        if self.subject_has_mortgaged_house():
             risk_profile["home"] += 1
             risk_profile["disability"] -= 1
 
-        # print("Dependents: ", self.subject_has_dependents(subject.dependents))
-        if self.subject_has_dependents(subject.dependents):
-            # print(risk_profile)
+        if self.subject_has_dependents():
+
             risk_profile["home"] += 1
             risk_profile["disability"] += 1
 
-        # print("Married: ", self.subject_is_married(subject.marital_status))
-        if self.subject_is_married(subject.marital_status):
+        if self.subject_is_married():
             risk_profile["life"] += 1
             risk_profile["disability"] -= 1
 
-        # print("Vehicle: ", self.subject_vehicle_age(subject.vehicle))
-        if self.subject_vehicle_age(subject.vehicle):
+        if self.subject_vehicle_age():
             risk_profile["auto"] = risk_profile["auto"] + 1
 
-        # print("Age Range: ", self.subject_age_range(subject.age))
-        if self.subject_age_range(subject.age):
+        if self.subject_age_range(MIN_AGE_LIMIT, MAX_AGE_LIMIT):
             risk_profile["auto"] -= 1
             risk_profile["home"] -= 1
             risk_profile["life"] -= 1
             risk_profile["disability"] -= 1
 
-        # print("Age Min: ", self.subject_age_min(subject.age))
-        if self.subject_age_min(subject.age):
-            # print("Min age tru")
+        if self.subject_under_min_age(MIN_AGE_LIMIT):
+
             risk_profile["auto"] -= 2
             risk_profile["home"] -= 2
             risk_profile["life"] -= 2
             risk_profile["disability"] -= 2
 
-        # print("Age Max: ", self.subject_age_max(subject.age))
-        if self.subject_age_max(subject.age) is True:
+        if self.subject_over_max_age(MAX_AGE_LIMIT) is True:
             risk_profile["disability"] = RiskScoreEnum.ineligible
             risk_profile["life"] = RiskScoreEnum.ineligible
 
