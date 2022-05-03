@@ -5,11 +5,8 @@ from .schemas.risk_score import RiskProfile
 
 class RiskAnalysisService:
 
-    risk_calculator: RiskCalculator
-
     def __init__(self) -> None:
-        self.risk_calculator = RiskCalculator()
         pass
 
     def run_risk_analysis(self, subject: PersonalInformationSchema) -> RiskProfile:
-        return self.risk_calculator.calculate_subject_score(subject)
+        return RiskCalculator(subject).calculate_subject_score()
