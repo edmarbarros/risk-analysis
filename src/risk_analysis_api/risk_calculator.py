@@ -1,55 +1,57 @@
 import datetime
 
 from src.risk_analysis_api.schemas.personal_information_schema import PersonalInformationSchema, OwnershipStatusEnum, \
-    MaritalStatusEnum, VehicleSchema, HouseSchema
+    MaritalStatusEnum
 
 from .schemas.risk_score import RiskProfile, RiskScoreEnum
 from .risk_analysis_constants import MAX_AGE_LIMIT, MIN_AGE_LIMIT, MIN_INCOME, MIN_INCOME_THRESHOLD
 
 
 class RiskCalculator:
+    subject: PersonalInformationSchema
 
-    def __init__(self) -> None:
+    def __init__(self, subject: PersonalInformationSchema) -> None:
+        self.subject = subject
         pass
 
-    def subject_has_mortgaged_house(self, house: HouseSchema) -> bool:
-        if house is not None and house.ownership_status == OwnershipStatusEnum.mortgaged:
+    def subject_has_mortgaged_house(self) -> bool:
+        if self.subject.house is not None and self.subject.house.ownership_status == OwnershipStatusEnum.mortgaged:
             return True
 
         return False
 
-    def subject_check_income(self, income: int, income_value: int) -> bool:
-        return income > income_value
+    def subject_check_income_min(self, min_income_value: int) -> bool:
+        if self.subject.income == 0:
+            return False
+        return self.subject.income >= min_income_value
 
-    def subject_age_min(self, age: int) -> bool:
-        return age < MIN_AGE_LIMIT
+    def subject_under_min_age(self, min_age: int) -> bool:
+        return self.subject.age < min_age
 
-    def subject_age_range(self, age: int) -> bool:
-        return MIN_AGE_LIMIT < age < MAX_AGE_LIMIT
+    def subject_over_max_age(self, max_age: int) -> bool:
+        return self.subject.age >= max_age
 
-    def subject_age_max(self, age: int) -> bool:
-        return age >= MAX_AGE_LIMIT
+    def subject_age_range(self, min_age: int, max_age: int) -> bool:
+        return min_age < self.subject.age < max_age
 
-    def subject_risk_answers(self, risk_questions: List) -> int:
-        return sum(risk_questions)
+    def subject_risk_answers(self) -> int:
+        return sum(self.subject.risk_questions)
 
-    def subject_is_married(self, marital_status: MaritalStatusEnum) -> bool:
-        return marital_status == MaritalStatusEnum.married
+    def subject_is_married(self) -> bool:
+        return self.subject.marital_status == MaritalStatusEnum.married
 
-    @staticmethod
-    def subject_vehicle_age(vehicle: VehicleSchema) -> bool:
-        print(vehicle)
-        if vehicle is None or vehicle.year is None:
+    def subject_vehicle_age(self) -> bool:
+        if self.subject.vehicle is None or self.subject.vehicle.year is None:
             return False
 
         current_year = datetime.date.today().year
-        return (current_year - vehicle.year) <= 5
+        return (current_year - self.subject.vehicle.year) <= 5
+
+    def subject_has_dependents(self) -> bool:
+        return self.subject.dependents > 0
 
     @staticmethod
-    def subject_has_dependents(dependents: int) -> bool:
-        return dependents > 0
-
-    def get_risk_score(self, risk) -> RiskScoreEnum:
+    def get_risk_score(risk) -> RiskScoreEnum:
         if risk is RiskScoreEnum.ineligible:
             return RiskScoreEnum.ineligible
 
@@ -68,7 +70,7 @@ class RiskCalculator:
             "life": self.get_risk_score(risk_profile["life"]),
         }
 
-    def calculate_subject_score(self, subject: PersonalInformationSchema) -> RiskProfile:
+    def calculate_subject_score(self) -> RiskProfile:
 
         initial_risk_value = self.subject_risk_answers()
         risk_profile = {
