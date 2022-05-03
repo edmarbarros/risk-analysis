@@ -1,5 +1,4 @@
 import datetime
-from typing import List
 
 from src.risk_analysis_api.schemas.personal_information_schema import PersonalInformationSchema, OwnershipStatusEnum, \
     MaritalStatusEnum, VehicleSchema, HouseSchema
