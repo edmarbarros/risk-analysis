@@ -86,3 +86,167 @@ This assignment should be doable in less than one day. We expect you to learn fa
 It is not necessary to build the screens a user would interact with, however, as the API is intended to power a user-facing application, we expect the implementation to be as close as possible to what would be necessary in real-life. Consider another developer would get your project/repository to evolve and implement new features from exactly where you stopped. 
 
 
+# Development Notes
+
+In order to keep the code DRY and define the responsibilities of each class, I divide the code into the following main parts:
+ - main.py - Start the service and load the individual modules:
+ - src/risk_analysis - Module to handle the Risk Analysis API
+
+Each module should represent a base endpoint, in this case, this module handles the `risk-analysis`.
+
+- risk_analysis_constants - To keep the code organized and reduce the use of magic strings/numbers
+- risk_analysis_controller - Describe the API endpoints that handle the incoming HTTP requests
+- risk_analysis_service - Handle the Business logic and data manipulation
+- risk_calculator - Score Calculator 
+
+The Score Calculator is a Class that will handle all the Risk Calculation Rules.
+
+
+### API Documentation
+On of the advantages of FastAPI is the API documentation that is generated based on the [Pydantic](https://pydantic-docs.helpmanual.io/) Models and the Controller definition.
+
+
+OpenAPI - http://127.0.0.1:8000/docs
+
+Redoc - http://127.0.0.1:8000/redoc
+
+
+### API Error Responses
+
+If a mandatory field is not present, the application consuming the endpoints will be able to map it precisely to the end user using the following error response:  
+
+#### Missing mandatory Field
+```json
+{
+  "detail": [
+    {
+      "loc": [
+        "body",
+        "risk_questions"
+      ],
+      "msg": "field required",
+      "type": "value_error.missing"
+    }
+  ]
+}
+```
+#### Invalid Field Type
+```json
+{
+  "detail": [
+    {
+      "loc": [
+        "body",
+        "dependents"
+      ],
+      "msg": "value is not a valid integer",
+      "type": "type_error.integer"
+    }
+  ]
+} 
+```
+#### Invalid Value
+```json
+{
+  "detail": [
+    {
+      "loc": [
+        "body",
+        "age"
+      ],
+      "msg": "ensure this value is greater than or equal to 0",
+      "type": "value_error.number.not_ge",
+      "ctx": {
+        "limit_value": 0
+      }
+    }
+  ]
+}
+```
+
+### Technology
+
+The solution was developed using Python 3.9, [FastAPI Framework](https://fastapi.tiangolo.com/) and [Poetry](https://python-poetry.org/) as a package dependency management following the [PEP 8](https://peps.python.org/pep-0008/) code convention.
+
+
+### Requirements 
+
+- [Python 3.9](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/#installation)
+
+### Usage
+
+Install dependencies:
+```
+$ poetry install 
+```
+
+Start the server:
+```
+$ poetry run start
+```
+
+### Tests
+Run Tests with coverage report:
+```
+$ poetry run pytest -vv --cov=.
+```
+
+```
+---------- coverage: platform darwin, python 3.9.10-final-0 ----------
+Name                                                           Stmts   Miss  Cover
+----------------------------------------------------------------------------------
+src/main.py                                                       20      7    65%
+src/risk_analysis_api/__init__.py                                  1      0   100%
+src/risk_analysis_api/risk_analysis_constants.py                   4      0   100%
+src/risk_analysis_api/risk_analysis_controller.py                  8      0   100%
+src/risk_analysis_api/risk_analysys_service.py                     8      0   100%
+src/risk_analysis_api/risk_calculator.py                          84      0   100%
+src/risk_analysis_api/schemas/__init__.py                          0      0   100%
+src/risk_analysis_api/schemas/personal_information_schema.py      22      0   100%
+src/risk_analysis_api/schemas/risk_score.py                       12      0   100%
+test/__init__.py                                                   0      0   100%
+test/test_main.py                                                  7      0   100%
+test/test_risk_analysis_api.py                                    72      0   100%
+test/test_risk_calculator.py                                      80      1    99%
+----------------------------------------------------------------------------------
+TOTAL                                                            318      8    97%
+
+```
+
+### Project Structure
+
+```
+.
+|____pytest.ini
+|____pyproject.toml                         # Project Configuration
+|____README.md
+|____poetry.lock
+|____test                                   # Global Tests directory 
+| |____test_risk_analysis_api.py
+| |____test_risk_calculator.py
+| |____test_main.py
+|____src                                    # Modules Root
+| |____risk_analysis_api                    # Risk Analysis Module
+| | |____schemas                            # Data Models
+| | | |____personal_information_schema.py   
+| | | |____risk_score.py
+| | |____risk_calculator.py                 # Risk Calculator
+| | |____risk_analysis_constants.py         # Module Constant
+| | |____risk_analysis_controller.py        # API Controller
+| | |____risk_analysys_service.py           # API Service
+| |____main.py                              # Main server
+
+```
+
+### Improvements to make it Production ready
+
+
+- [ ] Expand uvicorn log configuration and add logs to trace the request lifecycle 
+- [ ] Health Monitor
+- [ ] API Authentication and Authorization
+- [ ] Rate Limit
+- [ ] Containerization
+- [ ] Configure a linter to enforce code style
+- [ ] Configure Semantic Release with commit pre-fixes
+- [ ] Use pre-commit/push hooks to run validations(tests, lint..) 
