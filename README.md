@@ -239,6 +239,17 @@ TOTAL                                                            318      8    9
 
 ```
 
+### Assumptions
+
+Some rules are not defining the inclusion or exclusion clearly, based on that, here is my assumptions:
+
+Based on that, I have assumed the following rules:
+ - Min age is exclusive, from 29 years old or under
+ - Age range is inclusive, from 30 to 40 years old
+ - Max age is exclusive, from 61 years old or above
+ - Vehicle production year is inclusive, from 5 years old or under
+ - Income is inclusive, from 200000 and above
+
 ### Improvements to make it Production ready
 
 
