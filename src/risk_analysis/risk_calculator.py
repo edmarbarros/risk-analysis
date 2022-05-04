@@ -29,10 +29,10 @@ class RiskCalculator:
         return self.subject.age < min_age
 
     def subject_over_max_age(self, max_age: int) -> bool:
-        return self.subject.age >= max_age
+        return self.subject.age > max_age
 
     def subject_age_range(self, min_age: int, max_age: int) -> bool:
-        return min_age < self.subject.age < max_age
+        return min_age <= self.subject.age <= max_age
 
     def subject_risk_answers(self) -> int:
         return sum(self.subject.risk_questions)
