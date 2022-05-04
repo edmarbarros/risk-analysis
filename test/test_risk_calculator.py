@@ -1,9 +1,9 @@
 import unittest
 
-from src.risk_analysis_api.schemas.personal_information_schema import PersonalInformationSchema
-from src.risk_analysis_api.risk_calculator import RiskCalculator
-from src.risk_analysis_api.risk_analysis_constants import MAX_AGE_LIMIT, MIN_AGE_LIMIT, MIN_INCOME, MIN_INCOME_THRESHOLD
-from src.risk_analysis_api.schemas.risk_score import RiskScoreEnum, RiskProfile
+from src.risk_analysis.schemas.personal_information_schema import PersonalInformationSchema
+from src.risk_analysis.risk_calculator import RiskCalculator
+from src.risk_analysis.risk_analysis_constants import MAX_AGE_LIMIT, MIN_AGE_LIMIT, MIN_INCOME, MIN_INCOME_THRESHOLD
+from src.risk_analysis.schemas.risk_score import RiskScoreEnum, RiskProfile
 
 
 class TestRiskCalculator(unittest.TestCase):

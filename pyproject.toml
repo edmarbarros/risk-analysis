@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Origin Risk Analysis API"
 authors = ["Edmar Barros <edmarbarros@users.noreply.github.com>"]
 packages = [
-    { include = "risk_analysis_api", from = "src" },
+    { include = "risk_analysis", from = "src" },
 ]
 
 

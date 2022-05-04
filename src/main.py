@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from risk_analysis_api import risk_analysis_controller
+from risk_analysis import risk_analysis_controller
 
 app = FastAPI()
 app.include_router(risk_analysis_controller.router)
@@ -34,3 +34,17 @@ app.openapi = custom_openapi
 def start():
     """Launched with `poetry run start` at root level"""
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+
+"""
+    TODO
+     - [ ] Docker and compose with debug
+     - [ ] ORM with SQLite to store data
+     - [x] Create Endpoint
+     - [x] Document OpenAPI
+     - [ ] API Rate Limit
+     - [ ] Authentication Header
+     - [x] Unit Tests, E2E Tests
+     - [ ] Update Readme
+     - [ ] Deploy with github actions?
+"""

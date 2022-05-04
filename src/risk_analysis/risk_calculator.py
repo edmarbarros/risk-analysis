@@ -1,6 +1,6 @@
 import datetime
 
-from src.risk_analysis_api.schemas.personal_information_schema import PersonalInformationSchema, OwnershipStatusEnum, \
+from src.risk_analysis.schemas.personal_information_schema import PersonalInformationSchema, OwnershipStatusEnum, \
     MaritalStatusEnum
 
 from .schemas.risk_score import RiskProfile, RiskScoreEnum

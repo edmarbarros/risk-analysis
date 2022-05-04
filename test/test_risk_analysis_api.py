@@ -1,9 +1,9 @@
-from src.risk_analysis_api import __version__
+from src.risk_analysis import __version__
 
 from fastapi.testclient import TestClient
 
 from src.main import app
-from src.risk_analysis_api.schemas.risk_score import RiskScoreEnum
+from src.risk_analysis.schemas.risk_score import RiskScoreEnum
 
 client = TestClient(app)
 
